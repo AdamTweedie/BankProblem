@@ -60,7 +60,6 @@ def main(seed, t, p, m):
     l = solutions[i].split("  ")
     tv = 0
     tw = 0
-
     for bag in l:
         tv += float(bag.split(" ")[2])
         tw += float(bag.split(" ")[1])
@@ -223,12 +222,4 @@ def is_duplicates(list):
 
 if __name__ == '__main__':
 
-    data = []
-    for i in range(15):
-        data.append(main(i, 2, 100, 2))
-
-    columns = ['seed', 'num bags', 'duplicate bags', 'total weight', 'total value', 'fitness']
-
-    df = pd.DataFrame(data = data, columns = columns)
-    #df.to_csv('t_p100_m4.csv')
-    print(df)
+    print(main(11, 2, 125, 1))
