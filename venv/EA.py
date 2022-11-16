@@ -68,7 +68,7 @@ def main(seed, t, p, m):
     for sol in solutions[i].split("  "):
         bags.append(sol.split(" ")[0])
 
-    return [seed, len(l), is_duplicates(l), tw, tv, best]
+    return [p, t, m, seed, len(l), is_duplicates(l), tw, tv, best]
 
 
 def initialize(p, data, capacity):
@@ -222,4 +222,20 @@ def is_duplicates(list):
 
 if __name__ == '__main__':
 
-    print(main(11, 2, 125, 1))
+    columns = ['p', 't', 'm', 'seed', "num_bags", "duplicate_bags", "total_weight", "total_value", "fitness"]
+
+    data = []
+    for i in range(500):
+        seed = random.randint(1,1000)
+        random.seed(seed)
+        population = random.randint(25, 200)
+        tournament = random.randint(2, 50)
+        mutate = random.randint(1, 20)
+
+        data.append(main(seed, tournament, population, mutate))
+
+
+    df = pd.DataFrame(data = data, columns = columns)
+    df.to_csv('even_bigger_data.csv')
+
+
