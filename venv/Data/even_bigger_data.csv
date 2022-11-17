@@ -1,4 +1,4 @@
-p,t,m,seed,num_bags,duplicate_bags,total_weight,total_value,fitness
+,p,t,m,seed,num_bags,duplicate_bags,total_weight,total_value,fitness
 0,141,47,11,27511,59,False,278.6000000000002,3524.0,1.603698799236899
 1,99,9,26,75594,63,False,284.6000000000002,4076.0,1.872832454270004
 2,108,42,2,77557,57,False,284.8000000000001,3494.0,1.6201226947966938
