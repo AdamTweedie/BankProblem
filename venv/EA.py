@@ -225,14 +225,20 @@ if __name__ == '__main__':
     columns = ['p', 't', 'm', 'seed', "num_bags", "duplicate_bags", "total_weight", "total_value", "fitness"]
 
     data = []
-    for i in range(500):
-        seed = random.randint(1,1000)
+    count = 0
+    while count < 100:
+        seed = random.randint(1,100000)
         random.seed(seed)
         population = random.randint(25, 200)
         tournament = random.randint(2, 50)
-        mutate = random.randint(1, 20)
-
-        data.append(main(seed, tournament, population, mutate))
+        mutate = random.randint(1, 50)
+        sol = main(seed, tournament, population, mutate)
+        if sol not in data:
+            print(True)
+            data.append(sol)
+            count += 1
+        else:
+            print(False)
 
 
     df = pd.DataFrame(data = data, columns = columns)
