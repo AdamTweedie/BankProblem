@@ -18,7 +18,6 @@ def main(seed, t, p, m):
             data.append(row)
 
     total_value = 0
-
     for bag in data:
         total_value += float(bag[2])
 
@@ -226,12 +225,12 @@ if __name__ == '__main__':
 
     data = []
     count = 0
-    while count < 100:
+    while count < 20:
         seed = random.randint(1,100000)
         random.seed(seed)
-        population = random.randint(25, 200)
-        tournament = random.randint(2, 50)
-        mutate = random.randint(1, 50)
+        population = 100
+        tournament = 2
+        mutate = 1
         sol = main(seed, tournament, population, mutate)
         if sol not in data:
             print(True)
@@ -242,6 +241,6 @@ if __name__ == '__main__':
 
 
     df = pd.DataFrame(data = data, columns = columns)
-    df.to_csv('even_bigger_data.csv')
+    df.to_csv('with_crossover.csv')
 
 
