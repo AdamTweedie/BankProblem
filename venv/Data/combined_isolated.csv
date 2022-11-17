@@ -1,4 +1,4 @@
-seed,num_bags,duplicate_bags,total_weight,total_value,fitness,id,name
+,seed,num_bags,duplicate_bags,total_weight,total_value,fitness,id,name
 0,0,58,False,283.2000000000002,3658.0,1.6436486739236158,1,t2_p25_m1.csv
 1,1,55,False,284.5000000000002,3579.0,1.6341731193655789,1,t2_p25_m1.csv
 2,2,56,False,283.40000000000026,3559.0,1.626759809972694,1,t2_p25_m1.csv
