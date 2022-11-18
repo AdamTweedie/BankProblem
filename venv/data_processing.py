@@ -1,3 +1,8 @@
+"""
+Year: 2022
+Version: 1
+Author: 690024916
+"""
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
