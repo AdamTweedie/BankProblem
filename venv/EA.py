@@ -10,6 +10,13 @@ from itertools import chain
 
 
 def run(seed, t, p, m):
+    """
+    :param seed: random number seed
+    :param t: tournament size
+    :param p: population size
+    :param m: mutation rate
+    :return: list of data with key features obtained through trial
+    """
     random.seed(seed)
     txt = pd.read_fwf('BankProblem.txt')
     capacity = float(txt.columns[1]) # Get capacity from header
@@ -69,6 +76,7 @@ def run(seed, t, p, m):
 
 
 def initialize(p, data, capacity):
+    """Initializes solution population of size p and returns solutions"""
     c = 1
     solutions = []
     while c <= p:
@@ -79,6 +87,7 @@ def initialize(p, data, capacity):
             rand_bag = random.choice(data)
             solution.append(rand_bag)
             if is_duplicates(solution) == True:
+                # ensure solution has no duplicates
                 solution.pop()
             else:
                 count += 1
@@ -90,6 +99,8 @@ def initialize(p, data, capacity):
 
 
 def binary_tournament_selection(solutions, t_size, f_scores):
+    """ Generates random solutions list of size 't_size' then
+     returns fittest solution, breaking ties randomly"""
     fitness_pool = []
 
     for i in range(t_size):
@@ -110,8 +121,8 @@ def binary_tournament_selection(solutions, t_size, f_scores):
 
 
 def encode_data(data):
-    # value encoding technique with following strucure:
-    # "bag_number bag_weight bag_value"
+    """value encoding technique with following strucure:
+     "bag_number bag_weight bag_value" """
     encoded = []
     for bag in data: encoded.append(bag[0]+" "+bag[1]+" "+bag[2])
 
@@ -119,7 +130,8 @@ def encode_data(data):
 
 
 def calculateFitness(s, c, v):
-    # solution (s), capacity (c), total value (v)
+    """Calculate solutions fitness: solution (s),
+     capacity (c), total value (v)"""
     sum_weight = 0
     sum_value = 0
     if len(s) > 0:
@@ -146,8 +158,9 @@ def calculateFitness(s, c, v):
 
 
 def single_point_crossover(parent1, parent2):
+    """ Runs single point crossover on a randomly decided point on each parent.
+    swapping the genes after the point. Then removes duplicates"""
     child1, child2 = [], []
-
     if (len(parent1) and len(parent2)) > 2:
         parent1 = parent1.split("  ")
         parent2 = parent2.split("  ")
@@ -169,14 +182,14 @@ def single_point_crossover(parent1, parent2):
 
 
 def remove_duplicates(seq):
-    # removes duplicates while maintaining current order
+    """removes duplicates while maintaining current order"""
     seen = set()
     seen_add = seen.add
     return [x for x in seq if not (x in seen or seen_add(x))]
 
 
 def mutation(m, child):
-    # Randomly swap values in the solution#
+    """Randomly swap values m amount of times in the solution"""
     child = child.split("  ")
     if len(child) > 1:
         for i in range(m):
@@ -189,8 +202,9 @@ def mutation(m, child):
 
 
 def weakest_replacement(new_s, new_f, fitness_scores, solutions):
+    """Replaces the new solution (new_s) with the weakest solution in solutions,
+     breaking ties randomly"""
     scores = list(chain.from_iterable(fitness_scores))[1::2]
-
     if len(set(scores)) == 1:
         index = random.randint(0, len(solutions)-1)
         solutions[index] = new_s
@@ -211,6 +225,7 @@ def weakest_replacement(new_s, new_f, fitness_scores, solutions):
 
 
 def is_duplicates(list):
+    """Checks for duplicates in a list"""
     if len(list) == len(set(list)):
         return False
     else:
@@ -218,6 +233,7 @@ def is_duplicates(list):
 
 
 if __name__ == '__main__':
+    ### DRIVER CODE TO RUN TESTS AND COLLECT DATA ###
     test_data, best_bags = [], []
     count = 0
     while count < 1:
@@ -243,5 +259,4 @@ if __name__ == '__main__':
     df2 = pd.DataFrame(data = best_bags, columns=columns2)
     df2.loc['total'] = df2.sum()
     df2.loc[df2.index[-1], 'bag number'] = len(best_bags)
-    print(df2)
     #df1.to_csv('name')
