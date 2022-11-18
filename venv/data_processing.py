@@ -36,6 +36,7 @@ df = df.drop('Unnamed: 0', axis='columns')
 """
 Scatter graph to show distribtion of scores accross the parameter tests
 """
+plt.figure(figsize=(8,4), dpi=150)
 cmap = sns.color_palette("hls", n_colors=16)
 groups = df.groupby('name')
 count = 0
@@ -48,9 +49,9 @@ font = {'family': 'serif', 'size': 10}
 font2 = {'family': 'serif', 'size': 10}
 plt.xlabel("Total Weight (kg)", fontdict=font)
 plt.ylabel("Total Value (£)", fontdict=font)
-plt.title("Genetic Algorithm performance with varying p, t, and m values", fontdict=font2)
+plt.title("GA with varying p, t, and m values", fontdict=font2)
 plt.legend(bbox_to_anchor=(1.1, 1.00))
-# plt.show()
+plt.show()
 
 
 """

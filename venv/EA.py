@@ -223,7 +223,7 @@ if __name__ == '__main__':
     while count < 1:
         seed = random.randint(1, 100000)
         random.seed(seed)
-        population = 100
+        population = 400
         tournament = 2
         mutate = 1
         sol_data = run(seed, tournament, population, mutate)
