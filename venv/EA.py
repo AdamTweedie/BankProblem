@@ -1,20 +1,27 @@
+"""
+Year: 2022
+Version: 1
+Author: 690024916
+"""
 import pandas as pd
 import re
 import random
 from itertools import chain
 
-def main(seed, t, p, m):
+
+def run(seed, t, p, m):
     random.seed(seed)
     txt = pd.read_fwf('BankProblem.txt')
-    capacity = float(txt.columns[1])
-    list = txt.values.tolist()
+    capacity = float(txt.columns[1]) # Get capacity from header
+    txt_list = txt.values.tolist()
     data = []
-    for li in list:
+    for li in txt_list:
         if "bag" in li[0]:
-            index = list.index(li)
+            index = txt_list.index(li)
+            # append text file data to list
             row = [str(len(data)),
-                   re.findall(r'\d+\.\d+', list[index+1][0])[0],
-                   re.findall(r'\d+', list[index+2][0])[0]]
+                   re.findall(r'\d+\.\d+', txt_list[index+1][0])[0],
+                   re.findall(r'\d+', txt_list[index+2][0])[0]]
             data.append(row)
 
     total_value = 0
@@ -49,25 +56,16 @@ def main(seed, t, p, m):
         # + 2 becuase 2 fitness evaluations were made
         evaluations += 2
 
-
-    ss = []
-    for fitness in fitness_scores:
-        ss.append(fitness[1])
-
-    best = max(ss)
-    i = ss.index(best)
-    l = solutions[i].split("  ")
-    tv = 0
-    tw = 0
-    for bag in l:
+    scores = list(chain.from_iterable(fitness_scores))[1::2]
+    best_fitness = max(scores)
+    best_i = scores.index(best_fitness)
+    best_solution = solutions[best_i].split("  ")
+    tv, tw = 0, 0
+    for bag in best_solution:
         tv += float(bag.split(" ")[2])
         tw += float(bag.split(" ")[1])
 
-    bags = []
-    for sol in solutions[i].split("  "):
-        bags.append(sol.split(" ")[0])
-
-    return [p, t, m, seed, len(l), is_duplicates(l), tw, tv, best]
+    return [p, t, m, seed, len(best_solution), is_duplicates(best_solution), tw, tv, best_fitness], best_solution
 
 
 def initialize(p, data, capacity):
@@ -220,27 +218,30 @@ def is_duplicates(list):
 
 
 if __name__ == '__main__':
-
-    columns = ['p', 't', 'm', 'seed', "num_bags", "duplicate_bags", "total_weight", "total_value", "fitness"]
-
-    data = []
+    test_data, best_bags = [], []
     count = 0
-    while count < 20:
-        seed = random.randint(1,100000)
+    while count < 1:
+        seed = random.randint(1, 100000)
         random.seed(seed)
         population = 100
         tournament = 2
         mutate = 1
-        sol = main(seed, tournament, population, mutate)
-        if sol not in data:
-            print(True)
-            data.append(sol)
+        sol_data = run(seed, tournament, population, mutate)
+        d = sol_data[0]
+        best_bags = sol_data[1]
+        if d not in test_data:
+            test_data.append(d)
             count += 1
-        else:
-            print(False)
 
+    columns1 = ['p', 't', 'm', 'seed', "num_bags", "duplicate_bags", "total_weight", "total_value", "fitness"]
+    df1 = pd.DataFrame(data = test_data, columns = columns1)
 
-    df = pd.DataFrame(data = data, columns = columns)
-    df.to_csv('with_crossover.csv')
-
-
+    for i in range(len(best_bags)):
+        b = best_bags[i].split(" ")
+        best_bags[i] = [float(b[0]), float(b[1]), float(b[2])]
+    columns2 = ['bag number', 'weight', 'value']
+    df2 = pd.DataFrame(data = best_bags, columns=columns2)
+    df2.loc['total'] = df2.sum()
+    df2.loc[df2.index[-1], 'bag number'] = len(best_bags)
+    print(df2)
+    #df1.to_csv('name')
